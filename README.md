@@ -54,7 +54,6 @@ npm install
 # Run the development server (local: http://localhost:5173)
 npm run dev
 
-
 # Build production bundle
 npm run build
 
