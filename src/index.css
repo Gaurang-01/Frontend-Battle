@@ -1,0 +1,442 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base Resets & Global Styles ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-canvas:    #172836;
+  --color-glass:     #114C5A;
+  --color-arctic:    #F1F6F4;
+  --color-mint:      #D9E8E2;
+  --color-forsythia: #FFC801;
+  --color-saffron:   #FF9932;
+
+  /* Performance-tuned transition curves */
+  --ease-micro:   150ms cubic-bezier(0.0, 0.0, 0.2, 1);   /* hover/toggle */
+  --ease-micro-2: 200ms cubic-bezier(0.0, 0.0, 0.2, 1);   /* hover/toggle */
+  --ease-layout:  350ms cubic-bezier(0.4, 0.0, 0.2, 1);   /* structural reflows */
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-arctic);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100dvh;
+}
+
+/* ─── Glassmorphic Card Utility ────────────────────────────────────────────── */
+.glass-card {
+  background: rgba(17, 76, 90, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(217, 232, 226, 0.08);
+  border-radius: 16px;
+}
+
+.glass-card-strong {
+  background: rgba(17, 76, 90, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(217, 232, 226, 0.12);
+  border-radius: 20px;
+}
+
+/* ─── Text Shimmer Effect ──────────────────────────────────────────────────── */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-forsythia) 0%,
+    var(--color-saffron) 30%,
+    var(--color-arctic) 50%,
+    var(--color-forsythia) 70%,
+    var(--color-saffron) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* ─── Floating Orb Animation ──────────────────────────────────────────────── */
+@keyframes float-orb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(30px, -40px) scale(1.05); }
+  66%       { transform: translate(-20px, 20px) scale(0.97); }
+}
+
+@keyframes float-orb-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(-40px, 30px) scale(1.08); }
+  66%       { transform: translate(25px, -35px) scale(0.95); }
+}
+
+/* ─── Scan Line ───────────────────────────────────────────────────────────── */
+@keyframes scan-line {
+  0%   { top: -2px; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* ─── Fade Up Entrance ────────────────────────────────────────────────────── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Entry Loader ────────────────────────────────────────────────────────── */
+@keyframes loader-bar {
+  0%   { width: 0%; opacity: 1; }
+  80%  { width: 100%; opacity: 1; }
+  100% { width: 100%; opacity: 0; }
+}
+
+@keyframes loader-fade-out {
+  0%   { opacity: 1; visibility: visible; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+.entrance-loader {
+  animation: loader-fade-out 500ms ease-out forwards;
+}
+
+.entrance-loader-bar {
+  animation: loader-bar 400ms ease-out forwards;
+}
+
+/* ─── Stagger Entrance ────────────────────────────────────────────────────── */
+.animate-entrance {
+  opacity: 0;
+  animation: fade-up 500ms cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+}
+
+.animate-entrance.delay-100 { animation-delay: 100ms; }
+.animate-entrance.delay-200 { animation-delay: 200ms; }
+.animate-entrance.delay-300 { animation-delay: 300ms; }
+.animate-entrance.delay-400 { animation-delay: 400ms; }
+.animate-entrance.delay-500 { animation-delay: 500ms; }
+
+/* ─── Bento Grid ──────────────────────────────────────────────────────────── */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: auto;
+  gap: 16px;
+}
+
+.bento-cell-wide {
+  grid-column: span 7;
+}
+
+.bento-cell-tall {
+  grid-column: span 5;
+  grid-row: span 2;
+}
+
+.bento-cell-half {
+  grid-column: span 6;
+}
+
+.bento-cell-third {
+  grid-column: span 4;
+}
+
+@media (max-width: 768px) {
+  .bento-cell-wide,
+  .bento-cell-tall,
+  .bento-cell-half,
+  .bento-cell-third {
+    grid-column: span 12;
+    grid-row: span 1;
+  }
+}
+
+/* ─── Accordion Smooth Open ───────────────────────────────────────────────── */
+.accordion-content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height var(--ease-layout), opacity var(--ease-layout);
+  opacity: 0;
+}
+
+.accordion-content.open {
+  max-height: 600px;
+  opacity: 1;
+}
+
+/* ─── Pricing Toggle ──────────────────────────────────────────────────────── */
+.toggle-track {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  background: rgba(17, 76, 90, 0.6);
+  border: 1px solid rgba(217, 232, 226, 0.15);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background var(--ease-micro);
+}
+
+.toggle-track.active {
+  background: rgba(255, 200, 1, 0.2);
+  border-color: rgba(255, 200, 1, 0.4);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  background: var(--color-mint);
+  border-radius: 50%;
+  transition: transform var(--ease-micro), background var(--ease-micro);
+  will-change: transform;
+}
+
+.toggle-track.active .toggle-thumb {
+  transform: translateX(24px);
+  background: var(--color-forsythia);
+}
+
+/* ─── Glow Button ─────────────────────────────────────────────────────────── */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--ease-micro), box-shadow var(--ease-micro);
+  will-change: transform;
+}
+
+.btn-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(255, 200, 1, 0.35), 0 2px 8px rgba(255, 153, 50, 0.2);
+}
+
+.btn-glow:active {
+  transform: translateY(0);
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity var(--ease-micro);
+}
+
+.btn-glow:hover::before {
+  opacity: 1;
+}
+
+/* ─── Shimmer Sweep on Primary CTA ───────────────────────────────────────── */
+/*
+ * Added: hardware-accelerated shimmer sweep on the primary hero CTA button.
+ * Uses ::after pseudo-element (separate from ::before glow overlay above)
+ * so both effects coexist. Pure CSS — no external animation library.
+ */
+@keyframes btn-shimmer-sweep {
+  0%   { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%) skewX(-15deg);
+  will-change: transform;
+}
+
+.btn-shimmer:hover::after {
+  animation: btn-shimmer-sweep 600ms ease-out forwards;
+}
+
+/* ─── Nav Link Hover ──────────────────────────────────────────────────────── */
+.nav-link {
+  position: relative;
+  transition: color var(--ease-micro);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-forsythia);
+  transition: width var(--ease-micro-2);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ─── Pricing Card Featured ───────────────────────────────────────────────── */
+.pricing-featured {
+  background: linear-gradient(135deg, rgba(17, 76, 90, 0.6) 0%, rgba(23, 40, 54, 0.8) 100%);
+  border: 1px solid rgba(255, 200, 1, 0.3);
+  box-shadow: 0 0 40px rgba(255, 200, 1, 0.08), inset 0 1px 0 rgba(255, 200, 1, 0.1);
+}
+
+/* ─── Grid Background ─────────────────────────────────────────────────────── */
+.bg-grid {
+  background-image: linear-gradient(rgba(209, 232, 226, 0.04) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(209, 232, 226, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ─── Stat Counter Digit ──────────────────────────────────────────────────── */
+.stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Scroll fade ─────────────────────────────────────────────────────────── */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 600ms ease-out, transform 600ms ease-out;
+}
+
+.section-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Custom Scrollbar ────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-canvas); }
+::-webkit-scrollbar-thumb { background: var(--color-glass); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(217, 232, 226, 0.3); }
+
+/* ─── Selection ───────────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(255, 200, 1, 0.25);
+  color: var(--color-arctic);
+}
+/* ─── ADDITIONS TO index.css ─────────────────────────────────────────────── */
+/* Paste these at the END of your existing index.css                          */
+
+/* ─── Terminal typewriter row ─────────────────────────────────────────────── */
+@keyframes termFadeIn {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ─── Hero left-align override on mobile ──────────────────────────────────── */
+@media (max-width: 768px) {
+  #hero .grid {
+    text-align: left;
+  }
+}
+
+/* ─── CTA form input ──────────────────────────────────────────────────────── */
+#cta-email {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+#cta-email:focus {
+  border-color: rgba(255, 200, 1, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ─── Footer wordmark background fix ─────────────────────────────────────── */
+footer .font-mono.font-bold {
+  /* Prevent the large wordmark from causing layout shift */
+  user-select: none;
+}
+
+/* ─── Green status dot pulse ─────────────────────────────────────────────── */
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(0.85); }
+}
+
+.animate-pulse {
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+/* ─── Terminal scrollbar ──────────────────────────────────────────────────── */
+[aria-label="Live platform status terminal"]::-webkit-scrollbar {
+  width: 3px;
+}
+[aria-label="Live platform status terminal"]::-webkit-scrollbar-thumb {
+  background: rgba(255, 200, 1, 0.2);
+  border-radius: 2px;
+}
+
+/* ─── Footer link hover underline ────────────────────────────────────────── */
+footer nav a {
+  position: relative;
+}
+
+footer nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: rgba(255, 200, 1, 0.5);
+  transition: width 150ms cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+footer nav a:hover::after {
+  width: 100%;
+}
+
+/* ─── Hero terminal widget border glow ───────────────────────────────────── */
+#hero [aria-label="Live platform status terminal"] {
+  background: transparent;
+}
+
+/* ─── Secondary CTA button polish ───────────────────────────────────────── */
+#hero-secondary-cta {
+  background: rgba(255, 255, 255, 0.03);
+}
+#hero-secondary-cta:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ─── Stats divider vertical line fix ───────────────────────────────────── */
+.bg-white\/8 {
+  background-color: rgba(255, 255, 255, 0.08);
+}
