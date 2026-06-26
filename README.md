@@ -54,8 +54,6 @@ npm install
 # Run the development server (local: http://localhost:5173)
 npm run dev
 
-# Lint code for errors/warnings using Oxlint
-npm run lint
 
 # Build production bundle
 npm run build
