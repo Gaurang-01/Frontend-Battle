@@ -103,7 +103,7 @@ const FEATURES = [
     ),
     color:       'rgba(255,153,50,0.06)',
     borderColor: 'rgba(255,153,50,0.15)',
-    gridClass:   'bento-cell-half',
+    gridClass:   'bento-cell-wide',
     spanRows:    1,
   },
 ];
